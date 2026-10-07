@@ -34,6 +34,7 @@
         "moduleResolution": "bundler" /* Specify how TypeScript looks up a file from a given module specifier. */,
         // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
         "paths": {
+            "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"],
             /* Specify a set of entries that re-map imports to additional lookup locations. */ "@/*": [
                 "./resources/js/*"
             ]
@@ -122,6 +123,8 @@
         "resources/js/**/*.ts",
         "resources/js/**/*.d.ts",
         "resources/js/**/*.tsx",
-        "resources/js/**/*.vue"
+        "resources/js/**/*.vue",
+        "auto-imports.d.ts",
+        "components.d.ts"
     ]
 }

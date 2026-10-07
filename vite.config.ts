@@ -1,6 +1,6 @@
 import inertia from '@inertiajs/vite';
 import { wayfinder } from '@laravel/vite-plugin-wayfinder';
-import tailwindcss from '@tailwindcss/vite';
+import ui from '@nuxt/ui/vite';
 import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
@@ -12,19 +12,42 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.ts'],
             refresh: true,
             fonts: [
-                bunny('Instrument Sans', {
+                bunny('Geist', {
+                    weights: [300, 400, 500, 600, 700],
+                }),
+                bunny('Geist Mono', {
                     weights: [400, 500, 600],
                 }),
             ],
         }),
         inertia(),
-        tailwindcss(),
         vue({
             template: {
                 transformAssetUrls: {
                     base: null,
                     includeAbsolute: false,
                 },
+            },
+        }),
+        ui({
+            router: 'inertia',
+            icon: {
+                clientBundle: { scan: true },
+            },
+            ui: {
+                colors: {
+                    neutral: 'neutral',
+                },
+                input: { defaultVariants: { variant: 'subtle' } },
+                select: { defaultVariants: { variant: 'subtle' } },
+                textarea: { defaultVariants: { variant: 'subtle' } },
+                selectMenu: { defaultVariants: { variant: 'subtle' } },
+                inputMenu: { defaultVariants: { variant: 'subtle' } },
+                inputNumber: { defaultVariants: { variant: 'subtle' } },
+                inputTags: { defaultVariants: { variant: 'subtle' } },
+                inputDate: { defaultVariants: { variant: 'subtle' } },
+                inputTime: { defaultVariants: { variant: 'subtle' } },
+                pinInput: { defaultVariants: { variant: 'subtle' } },
             },
         }),
         wayfinder({
@@ -50,7 +73,6 @@ export default defineConfig({
             'bootstrap/ssr/**',
             'tailwind.config.js',
             'resources/js/actions/**',
-            'resources/js/components/ui/*',
             'resources/js/routes/**',
             'resources/js/wayfinder/**',
         ],
@@ -69,11 +91,9 @@ export default defineConfig({
         ignorePatterns: [
             '.github/**',
             'composer.json',
-            'resources/js/components/ui/*',
             'resources/views/mail/*',
         ],
         sortTailwindcss: {
-            functions: ['clsx', 'cn', 'cva'],
             stylesheet: 'resources/css/app.css',
         },
     },
