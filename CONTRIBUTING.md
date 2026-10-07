@@ -59,7 +59,8 @@ LARAVEL_INSTALLER_NO_NODE=1 php artisan install:features \
 ## Dependencies
 
 - Lockfiles (`composer.lock`, `pnpm-lock.yaml`, `package-lock.json`) are not committed, so every new project resolves the latest versions.
-- Do not pin a package manager: no `packageManager` field in `package.json`. The kit must install under both npm (used by `composer setup` and CI) and pnpm.
+- Do not pin a package manager: no `packageManager` field in `package.json`. The Laravel installer offers `--npm`, `--pnpm`, `--yarn` and `--bun`, and the kit must install under all four. The installer rewrites the `npm` commands in the `dev`, `setup` and `ci:check` composer scripts, so keep them in their plain `npm ...` form.
+- `.github/workflows/tests.yml` ships to generated apps. Its "Setup package manager" step reads the manager from those rewritten composer scripts and installs it when the runner lacks it.
 - The Vite+ alias for `vite` needs both an `overrides` entry in `package.json` (npm) and the `catalog` and `overrides` in `pnpm-workspace.yaml` (pnpm). Keep both.
 
 ## Known workarounds
