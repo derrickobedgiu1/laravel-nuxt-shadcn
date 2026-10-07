@@ -1,0 +1,20 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:recommended", "schedule:weekly", "group:allNonMajor"],
+    "prHourlyLimit": 0,
+    "prConcurrentLimit": 0,
+    "minimumReleaseAge": "3 days",
+    "rangeStrategy": "bump",
+
+    "vulnerabilityAlerts": {
+        "schedule": [],
+        "minimumReleaseAge": null
+    },
+
+    "packageRules": [
+        {
+            "matchDepNames": ["php"],
+            "enabled": false
+        }
+    ]
+}
