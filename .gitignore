@@ -29,9 +29,11 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/.ai
 /.agents
 /.amp
 /.claude
+/.codex
 /.cursor
 /.factory
 /.grok

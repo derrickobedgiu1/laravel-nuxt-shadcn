@@ -61,6 +61,41 @@ function chiselResetComposerMetadata(Chisel $c): void
         );
 }
 
+/**
+ * The kit's own README describes the kit, so generated apps get Laravel's default one.
+ */
+function chiselInstallAppReadme(): void
+{
+    $stub = __DIR__.'/stubs/README.md';
+
+    if (file_exists($stub)) {
+        copy($stub, __DIR__.'/README.md');
+    }
+}
+
+/**
+ * Stubs are source material for the installer and have no place in a generated app.
+ */
+function chiselRemoveStubs(): void
+{
+    $directory = __DIR__.'/stubs';
+
+    if (! is_dir($directory)) {
+        return;
+    }
+
+    $entries = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST,
+    );
+
+    foreach ($entries as $entry) {
+        $entry->isDir() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
+    }
+
+    rmdir($directory);
+}
+
 function chiselSkipsNode(): bool
 {
     return filter_var(
@@ -309,6 +344,8 @@ return Chisel::script(__DIR__)
             ->removeLinesContaining('"@php artisan install:features --ansi"');
 
         chiselResetComposerMetadata($c);
+        chiselInstallAppReadme();
+        chiselRemoveStubs();
 
         chiselRun(['composer', 'lint'], 'Composer Lint');
         // Use the same PHP executable as Artisan when Windows has multiple installations on PATH.
