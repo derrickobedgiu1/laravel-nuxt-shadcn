@@ -25,7 +25,7 @@ It is based on Laravel's official Vue starter kit. The backend, authentication f
 ## Requirements
 
 - PHP 8.3+ and Composer
-- Node.js and npm or pnpm
+- Node.js and npm, pnpm, yarn or bun
 
 ## Installation
 
@@ -34,6 +34,8 @@ Create a project with the Laravel installer:
 ```bash
 laravel new my-app --using=derrickob/laravel-nuxt-shadcn
 ```
+
+Pick the package manager with `--pnpm`, `--yarn` or `--bun`. The default is npm. The installer switches the `composer` scripts to your choice, and the GitHub workflow follows it.
 
 The installer asks which authentication features to keep and then removes the code for everything you turn off.
 
