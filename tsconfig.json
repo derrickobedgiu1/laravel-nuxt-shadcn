@@ -126,5 +126,7 @@
         "resources/js/**/*.vue",
         "auto-imports.d.ts",
         "components.d.ts"
-    ]
+    ],
+    // Wayfinder generates a "query" verb that its Method type rejects until laravel/wayfinder#324 is released
+    "exclude": ["resources/js/actions/Illuminate"]
 }
