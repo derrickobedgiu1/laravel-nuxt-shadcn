@@ -31,6 +31,14 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Setup package manager
+        run: |
+          manager=npm
+          for candidate in pnpm yarn bun; do
+            if grep -q "\"$candidate " composer.json; then manager=$candidate; fi
+          done
+          command -v "$manager" > /dev/null || npm install --global "$manager"
+
       - name: Setup Application
         run: composer setup
 
