@@ -1,71 +1,61 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
-import Heading from '@/components/Heading.vue';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import type { NavigationMenuItem } from '@nuxt/ui';
+import { computed } from 'vue';
+import AppPanel from '@/components/AppPanel.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
-import { toUrl } from '@/lib/utils';
+import { toUrl } from '@/lib/url';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editProfile } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 import type { NavItem } from '@/types';
 
-const sidebarNavItems: NavItem[] = [
+const settingsNavItems: NavItem[] = [
     {
         title: 'Profile',
         href: editProfile(),
+        icon: 'i-lucide-user',
     },
     {
         title: 'Security',
         href: editSecurity(),
+        icon: 'i-lucide-shield',
     },
     {
         title: 'Appearance',
         href: editAppearance(),
+        icon: 'i-lucide-palette',
     },
 ];
 
 const { isCurrentOrParentUrl } = useCurrentUrl();
+
+const items = computed<NavigationMenuItem[]>(() =>
+    settingsNavItems.map((item) => ({
+        label: item.title,
+        icon: item.icon,
+        to: toUrl(item.href),
+        active: isCurrentOrParentUrl(item.href),
+    })),
+);
 </script>
 
 <template>
-    <div class="px-4 py-6">
-        <Heading
-            title="Settings"
-            description="Manage your profile and account settings"
-        />
-
-        <div class="flex flex-col lg:flex-row lg:space-x-12">
-            <aside class="w-full max-w-xl lg:w-48">
-                <nav
-                    class="flex flex-col space-y-1 space-x-0"
+    <AppPanel id="settings" title="Settings" :ui="{ body: 'lg:py-12' }">
+        <template #toolbar>
+            <UDashboardToolbar>
+                <UNavigationMenu
+                    :items="items"
+                    highlight
                     aria-label="Settings"
-                >
-                    <Button
-                        v-for="item in sidebarNavItems"
-                        :key="toUrl(item.href)"
-                        variant="ghost"
-                        :class="[
-                            'w-full justify-start',
-                            { 'bg-muted': isCurrentOrParentUrl(item.href) },
-                        ]"
-                        as-child
-                    >
-                        <Link :href="item.href">
-                            <component :is="item.icon" class="h-4 w-4" />
-                            {{ item.title }}
-                        </Link>
-                    </Button>
-                </nav>
-            </aside>
+                    class="-mx-1 flex-1"
+                />
+            </UDashboardToolbar>
+        </template>
 
-            <Separator class="my-6 lg:hidden" />
-
-            <div class="flex-1 md:max-w-2xl">
-                <section class="max-w-xl space-y-12">
-                    <slot />
-                </section>
-            </div>
+        <div
+            class="mx-auto flex w-full flex-col gap-4 sm:gap-6 lg:max-w-2xl lg:gap-12"
+        >
+            <slot />
         </div>
-    </div>
+    </AppPanel>
 </template>

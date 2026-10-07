@@ -15,15 +15,10 @@ return [
         'resources/js/components/ManageTwoFactor.vue',
         'resources/js/components/TwoFactorSetupModal.vue',
         'resources/js/components/TwoFactorRecoveryCodes.vue',
-        'resources/js/components/ui/input-otp/index.ts',
-        'resources/js/components/ui/input-otp/InputOTP.vue',
-        'resources/js/components/ui/input-otp/InputOTPGroup.vue',
-        'resources/js/components/ui/input-otp/InputOTPSeparator.vue',
-        'resources/js/components/ui/input-otp/InputOTPSlot.vue',
         'resources/js/composables/useTwoFactorAuth.ts',
     ],
 
-    'two_factor_otp_package' => 'vue-input-otp',
+    'two_factor_otp_package' => null,
 
     'passkey_files' => [
         'resources/js/components/PasskeyItem.vue',
