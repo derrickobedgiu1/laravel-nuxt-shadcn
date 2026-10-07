@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
-import InputError from '@/components/InputError.vue';
+import TextInput from '@/components/TextInput.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
@@ -32,83 +28,63 @@ defineOptions({
         class="flex flex-col gap-6"
     >
         <div class="grid gap-6">
-            <div class="grid gap-2">
-                <Label for="name">Name</Label>
-                <Input
-                    id="name"
+            <UFormField label="Name" :error="errors.name">
+                <TextInput
                     type="text"
-                    required
-                    v-focus
-                    :tabindex="1"
-                    autocomplete="name"
                     name="name"
+                    required
+                    autofocus
+                    autocomplete="name"
                     placeholder="Full name"
                 />
-                <InputError :message="errors.name" />
-            </div>
+            </UFormField>
 
-            <div class="grid gap-2">
-                <Label for="email">Email address</Label>
-                <Input
-                    id="email"
+            <UFormField label="Email address" :error="errors.email">
+                <TextInput
                     type="email"
-                    required
-                    :tabindex="2"
-                    autocomplete="email"
                     name="email"
+                    required
+                    autocomplete="email"
                     placeholder="email@example.com"
                 />
-                <InputError :message="errors.email" />
-            </div>
+            </UFormField>
 
-            <div class="grid gap-2">
-                <Label for="password">Password</Label>
+            <UFormField label="Password" :error="errors.password">
                 <PasswordInput
-                    id="password"
-                    required
-                    :tabindex="3"
-                    autocomplete="new-password"
                     name="password"
+                    required
+                    autocomplete="new-password"
                     placeholder="Password"
                     :passwordrules="passwordRules"
                 />
-                <InputError :message="errors.password" />
-            </div>
+            </UFormField>
 
-            <div class="grid gap-2">
-                <Label for="password_confirmation">Confirm password</Label>
+            <UFormField
+                label="Confirm password"
+                :error="errors.password_confirmation"
+            >
                 <PasswordInput
-                    id="password_confirmation"
-                    required
-                    :tabindex="4"
-                    autocomplete="new-password"
                     name="password_confirmation"
+                    required
+                    autocomplete="new-password"
                     placeholder="Confirm password"
                     :passwordrules="passwordRules"
                 />
-                <InputError :message="errors.password_confirmation" />
-            </div>
+            </UFormField>
 
-            <Button
+            <UButton
                 type="submit"
-                class="mt-2 w-full"
-                tabindex="5"
-                :disabled="processing"
+                label="Create account"
+                block
+                class="mt-2"
+                :loading="processing"
                 data-test="register-user-button"
-            >
-                <Spinner v-if="processing" />
-                Create account
-            </Button>
+            />
         </div>
 
-        <div class="text-center text-sm text-muted-foreground">
+        <div class="text-center text-sm text-muted">
             Already have an account?
-            <TextLink
-                :href="login()"
-                class="underline underline-offset-4"
-                :tabindex="6"
-                >Log in</TextLink
-            >
+            <TextLink :href="login()">Log in</TextLink>
         </div>
     </Form>
 </template>

@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
-import InputError from '@/components/InputError.vue';
+import TextInput from '@/components/TextInput.vue';
 import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 import { login } from '@/routes';
 import { email } from '@/routes/password';
 
@@ -24,41 +20,40 @@ defineProps<{
 <template>
     <Head title="Forgot password" />
 
-    <div
+    <UAlert
         v-if="status"
-        class="mb-4 text-center text-sm font-medium text-green-600"
-    >
-        {{ status }}
-    </div>
+        color="success"
+        variant="subtle"
+        :title="status"
+        class="mb-4"
+    />
 
     <div class="space-y-6">
-        <Form v-bind="email.form()" v-slot="{ errors, processing }">
-            <div class="grid gap-2">
-                <Label for="email">Email address</Label>
-                <Input
-                    id="email"
+        <Form
+            v-bind="email.form()"
+            v-slot="{ errors, processing }"
+            class="space-y-6"
+        >
+            <UFormField label="Email address" :error="errors.email">
+                <TextInput
                     type="email"
                     name="email"
                     autocomplete="off"
-                    v-focus
+                    autofocus
                     placeholder="email@example.com"
                 />
-                <InputError :message="errors.email" />
-            </div>
+            </UFormField>
 
-            <div class="my-6 flex items-center justify-start">
-                <Button
-                    class="w-full"
-                    :disabled="processing"
-                    data-test="email-password-reset-link-button"
-                >
-                    <Spinner v-if="processing" />
-                    Email password reset link
-                </Button>
-            </div>
+            <UButton
+                type="submit"
+                label="Email password reset link"
+                block
+                :loading="processing"
+                data-test="email-password-reset-link-button"
+            />
         </Form>
 
-        <div class="space-x-1 text-center text-sm text-muted-foreground">
+        <div class="space-x-1 text-center text-sm text-muted">
             <span>Or, return to</span>
             <TextLink :href="login()">log in</TextLink>
         </div>

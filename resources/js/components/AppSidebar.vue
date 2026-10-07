@@ -1,66 +1,70 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue';
+import type { NavigationMenuItem } from '@nuxt/ui';
+import { computed, ref } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
-import NavFooter from '@/components/NavFooter.vue';
-import NavMain from '@/components/NavMain.vue';
-import NavUser from '@/components/NavUser.vue';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import UserMenu from '@/components/UserMenu.vue';
+import { useNavigationItems } from '@/composables/useNavigationItems';
+import { footerNavItems, mainNavItems } from '@/lib/navigation';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
-];
+const open = ref(false);
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: FolderGit2,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
-];
+const { toMenuItems } = useNavigationItems();
+
+const close = () => {
+    open.value = false;
+};
+
+const mainItems = computed<NavigationMenuItem[]>(() =>
+    toMenuItems(mainNavItems, { onSelect: close }),
+);
+
+const footerItems = computed<NavigationMenuItem[]>(() =>
+    toMenuItems(footerNavItems, { external: true }),
+);
 </script>
 
 <template>
-    <Sidebar collapsible="icon" variant="inset">
-        <SidebarHeader>
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
-                            <AppLogo />
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-            </SidebarMenu>
-        </SidebarHeader>
+    <UDashboardSidebar
+        id="default"
+        v-model:open="open"
+        collapsible
+        resizable
+        class="bg-elevated/25"
+        :ui="{ footer: 'lg:border-t lg:border-default' }"
+    >
+        <template #header="{ collapsed }">
+            <Link
+                :href="dashboard()"
+                class="flex min-w-0 items-center rounded-md p-1 hover:bg-elevated"
+                :class="{ 'mx-auto': collapsed }"
+                @click="close"
+            >
+                <AppLogo :collapsed="collapsed" />
+            </Link>
+        </template>
 
-        <SidebarContent>
-            <NavMain :items="mainNavItems" />
-        </SidebarContent>
+        <template #default="{ collapsed }">
+            <UNavigationMenu
+                :collapsed="collapsed"
+                :items="mainItems"
+                orientation="vertical"
+                tooltip
+                popover
+            />
 
-        <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
-            <NavUser />
-        </SidebarFooter>
-    </Sidebar>
-    <slot />
+            <UNavigationMenu
+                :collapsed="collapsed"
+                :items="footerItems"
+                orientation="vertical"
+                tooltip
+                class="mt-auto"
+            />
+        </template>
+
+        <template #footer="{ collapsed }">
+            <UserMenu :collapsed="collapsed" />
+        </template>
+    </UDashboardSidebar>
 </template>

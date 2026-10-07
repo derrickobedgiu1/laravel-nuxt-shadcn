@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { usePasskeyRegister } from '@laravel/passkeys/vue';
 import { ref } from 'vue';
-import InputError from '@/components/InputError.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 const emit = defineEmits<{
     success: [];
@@ -60,43 +56,51 @@ const handleCancel = () => {
 </script>
 
 <template>
-    <div v-if="!isSupported" class="text-sm text-muted-foreground">
+    <p v-if="!isSupported" class="text-sm text-muted">
         Passkeys are not supported in this browser.
-    </div>
+    </p>
 
-    <Button v-else-if="!showForm" variant="outline" @click="showForm = true">
-        Add passkey
-    </Button>
+    <UButton
+        v-else-if="!showForm"
+        label="Add passkey"
+        color="neutral"
+        variant="outline"
+        @click="showForm = true"
+    />
 
     <form
         v-else
         @submit="handleSubmit"
-        class="space-y-4 rounded-lg border border-border bg-muted/50 p-4"
+        class="space-y-4 rounded-lg border border-default bg-elevated/50 p-4"
     >
-        <div class="grid gap-2">
-            <Label for="passkey-name">Passkey name</Label>
-            <Input
-                id="passkey-name"
-                type="text"
+        <UFormField
+            label="Passkey name"
+            help="A name helps you identify this passkey later."
+            :error="error || undefined"
+        >
+            <UInput
                 v-model="name"
+                type="text"
                 placeholder="e.g., MacBook Pro, iPhone"
-                class="mt-1 block w-full border-foreground/20"
-                v-focus
+                autofocus
+                class="w-full"
             />
-            <p class="text-xs text-muted-foreground">
-                A name helps you identify this passkey later.
-            </p>
-        </div>
-
-        <InputError v-if="error" :message="error" />
+        </UFormField>
 
         <div class="flex gap-2">
-            <Button type="submit" :disabled="isLoading || !name.trim()">
-                {{ isLoading ? 'Registering...' : 'Register passkey' }}
-            </Button>
-            <Button type="button" variant="ghost" @click="handleCancel">
-                Cancel
-            </Button>
+            <UButton
+                type="submit"
+                :label="isLoading ? 'Registering...' : 'Register passkey'"
+                :loading="isLoading"
+                :disabled="!name.trim()"
+            />
+            <UButton
+                type="button"
+                label="Cancel"
+                color="neutral"
+                variant="ghost"
+                @click="handleCancel"
+            />
         </div>
     </form>
 </template>

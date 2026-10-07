@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { Form, Head } from '@inertiajs/vue3';
-import InputError from '@/components/InputError.vue';
+import TextInput from '@/components/TextInput.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
 import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Spinner } from '@/components/ui/spinner';
 /* @chisel-registration */
 import { register } from '@/routes';
 /* @end-chisel-registration */
@@ -33,12 +28,13 @@ defineProps<{
 <template>
     <Head title="Log in" />
 
-    <div
+    <UAlert
         v-if="status"
-        class="mb-4 text-center text-sm font-medium text-green-600"
-    >
-        {{ status }}
-    </div>
+        color="success"
+        variant="subtle"
+        :title="status"
+        class="mb-4"
+    />
 
     <!-- @chisel-passkeys -->
     <PasskeyVerify />
@@ -51,67 +47,47 @@ defineProps<{
         class="flex flex-col gap-6"
     >
         <div class="grid gap-6">
-            <div class="grid gap-2">
-                <Label for="email">Email address</Label>
-                <Input
-                    id="email"
+            <UFormField label="Email address" :error="errors.email">
+                <TextInput
                     type="email"
                     name="email"
                     required
-                    v-focus
-                    :tabindex="1"
+                    autofocus
                     autocomplete="email"
                     placeholder="email@example.com"
                 />
-                <InputError :message="errors.email" />
-            </div>
+            </UFormField>
 
-            <div class="grid gap-2">
-                <div class="flex items-center justify-between">
-                    <Label for="password">Password</Label>
-                    <TextLink
-                        v-if="canResetPassword"
-                        :href="request()"
-                        class="text-sm"
-                        :tabindex="5"
-                    >
+            <UFormField label="Password" :error="errors.password">
+                <template v-if="canResetPassword" #hint>
+                    <TextLink :href="request()" class="text-sm">
                         Forgot your password?
                     </TextLink>
-                </div>
+                </template>
                 <PasswordInput
-                    id="password"
                     name="password"
                     required
-                    :tabindex="2"
                     autocomplete="current-password"
                     placeholder="Password"
                 />
-                <InputError :message="errors.password" />
-            </div>
+            </UFormField>
 
-            <div class="flex items-center justify-between">
-                <Label for="remember" class="flex items-center space-x-3">
-                    <Checkbox id="remember" name="remember" :tabindex="3" />
-                    <span>Remember me</span>
-                </Label>
-            </div>
+            <UCheckbox name="remember" label="Remember me" />
 
-            <Button
+            <UButton
                 type="submit"
-                class="mt-4 w-full"
-                :tabindex="4"
-                :disabled="processing"
+                label="Log in"
+                block
+                class="mt-2"
+                :loading="processing"
                 data-test="login-button"
-            >
-                <Spinner v-if="processing" />
-                Log in
-            </Button>
+            />
         </div>
 
         <!-- @chisel-registration -->
-        <div class="text-center text-sm text-muted-foreground">
+        <div class="text-center text-sm text-muted">
             Don't have an account?
-            <TextLink :href="register()" :tabindex="5">Sign up</TextLink>
+            <TextLink :href="register()">Sign up</TextLink>
         </div>
         <!-- @end-chisel-registration -->
     </Form>
