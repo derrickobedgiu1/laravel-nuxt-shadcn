@@ -39,6 +39,28 @@ function chiselRun(array $command, string $label): void
     }
 }
 
+/**
+ * The kit's package metadata belongs to the kit, not to the apps created from
+ * it, so reset it to the defaults of a fresh Laravel application.
+ */
+function chiselResetComposerMetadata(Chisel $c): void
+{
+    $c->file('composer.json')
+        ->removeLinesContaining('"homepage":')
+        ->replace(
+            "    \"authors\": [\n        {\n            \"name\": \"Derrick Obedgiu\",\n            \"email\": \"derrickobedgiu@gmail.com\"\n        }\n    ],\n",
+            '',
+        )
+        ->replace(
+            'A Laravel starter kit with Vue, Inertia and Nuxt UI.',
+            'The skeleton application for the Laravel framework.',
+        )
+        ->replace(
+            "\"laravel\",\n        \"starter-kit\",\n        \"inertia\",\n        \"vue\",\n        \"nuxt-ui\",\n        \"tailwindcss\"\n",
+            "\"laravel\",\n        \"framework\"\n",
+        );
+}
+
 function chiselSkipsNode(): bool
 {
     return filter_var(
@@ -285,6 +307,8 @@ return Chisel::script(__DIR__)
     ->apply(function (Chisel $c): void {
         $c->file('composer.json')
             ->removeLinesContaining('"@php artisan install:features --ansi"');
+
+        chiselResetComposerMetadata($c);
 
         chiselRun(['composer', 'lint'], 'Composer Lint');
         // Use the same PHP executable as Artisan when Windows has multiple installations on PATH.
