@@ -46,7 +46,7 @@ chisel-paths.php             Framework-specific file paths used by the installer
 
 `chisel.php` and `chisel-paths.php` drive the installer, using [Laravel Chisel](https://github.com/laravel/chisel) and Laravel Prompts. Optional code is wrapped in `@chisel-*` comments, for example `@chisel-passkeys ... @end-chisel-passkeys`, and the installer removes or keeps those sections depending on the answers. Keep the markers intact when you edit the files that contain them.
 
-When it finishes, the installer deletes itself and resets the kit's package metadata in `composer.json` (author, homepage, description and keywords) so new apps start with Laravel's defaults. That reset matches exact text in `chiselResetComposerMetadata()`, so when you change those fields in `composer.json`, change the strings in `chisel.php` too.
+When it finishes, the installer deletes itself and resets the kit's package metadata in `composer.json` (name, author, homepage, description and keywords) so new apps start with Laravel's defaults. That reset matches exact text in `chiselResetComposerMetadata()`, so when you change those fields in `composer.json`, change the strings in `chisel.php` too.
 
 Try the installer in a throwaway copy, never in your checkout. Pass answers to skip the prompts:
 
