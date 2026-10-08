@@ -46,6 +46,7 @@ function chiselRun(array $command, string $label): void
 function chiselResetComposerMetadata(Chisel $c): void
 {
     $c->file('composer.json')
+        ->replace('"name": "derrickob/laravel-nuxt-shadcn",', '"name": "laravel/laravel",')
         ->removeLinesContaining('"homepage":')
         ->replace(
             "    \"authors\": [\n        {\n            \"name\": \"Derrick Obedgiu\",\n            \"email\": \"derrickobedgiu@gmail.com\"\n        }\n    ],\n",
