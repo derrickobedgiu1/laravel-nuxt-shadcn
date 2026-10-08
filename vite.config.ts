@@ -54,6 +54,9 @@ export default defineConfig({
             formVariants: true,
         }),
     ]),
+    ssr: {
+        noExternal: ['@nuxt/ui'],
+    },
     server: {
         watch: {
             ignored: [
